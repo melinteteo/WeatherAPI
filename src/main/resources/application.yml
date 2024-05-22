@@ -1,0 +1,19 @@
+spring:
+  jpa:
+    open-in-view: 'true'
+  datasource:
+    username: sa
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    password: password
+  h2:
+    console:
+      enabled: 'true'
+      settings:
+        web-allow-others: 'true'
+  application:
+    name: WeatherAPI
+springdoc:
+  api-docs:
+    path: /api-docs
+
