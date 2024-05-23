@@ -8,7 +8,6 @@ import com.example.weather.data.entity.WeatherEntity;
 import com.example.weather.data.mapper.WeatherMapper;
 import com.example.weather.exception.WeatherServiceException;
 import com.example.weather.repository.WeatherRepository;
-import com.example.weather.service.openweather.OpenWeatherService;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,8 +30,6 @@ class WeatherServiceImplTest {
 
   @InjectMocks
   private WeatherServiceImpl weatherService;
-  @Mock
-  private OpenWeatherService openWeatherService;
   @Mock
   private WeatherRepository weatherRepository;
   @Mock
@@ -61,10 +58,6 @@ class WeatherServiceImplTest {
 
   @Test
   void refreshWeather() {
-    Mockito.when(
-            openWeatherService
-                .getWeatherForFirst100Cities(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
-        .thenReturn(List.of(WeatherEntity.builder().build()));
     Mockito.when(weatherRepository.findAll(ArgumentMatchers.any(Pageable.class))).thenReturn(weatherEntityPage);
     assertEquals(ResponseEntity.
         ok("Success"), weatherService.refreshWeather(Optional.empty(), Optional.empty()));

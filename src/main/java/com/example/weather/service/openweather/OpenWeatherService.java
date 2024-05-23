@@ -6,6 +6,6 @@ import java.util.Optional;
 
 public interface OpenWeatherService {
 
-  List<WeatherEntity> getWeatherForFirst100Cities(List<WeatherEntity> listOfFirst100WeatherByCityEntity,
+  void updateWeatherEntityList(List<WeatherEntity> listOfFirst100WeatherByCityEntity,
       Optional<String> units, Optional<String> languageCode);
 }

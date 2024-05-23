@@ -1,7 +1,5 @@
 package com.example.weather.service.openweather;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import com.example.weather.data.dto.openweather.MainDto;
 import com.example.weather.data.dto.openweather.OpenWeatherResponseDto;
 import com.example.weather.data.entity.WeatherEntity;
@@ -37,10 +35,13 @@ class OpenWeatherServiceImplTest {
 
   @Test
   void getWeatherForFirst100Cities() {
-    Mockito.doReturn(openWeatherResponseDtoFlux).when(openWeatherService)
-        .getWeatherForAllCities(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any());
-    assertEquals(weatherEntityList,
-        openWeatherService.getWeatherForFirst100Cities(weatherEntityList, Optional.empty(), Optional.empty()));
+
+    Mockito.when(
+        openWeatherService.getWeatherForAllCitiesById(weatherEntityList.stream().map(WeatherEntity::getCityId).toList(),
+            Optional.empty(), Optional.empty())).thenReturn(openWeatherResponseDtoFlux);
+    openWeatherService.updateWeatherEntityList(weatherEntityList, Optional.empty(), Optional.empty());
+    Mockito.verify(openWeatherService, Mockito.times(1))
+        .updateWeatherEntityList(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any());
   }
 
 }

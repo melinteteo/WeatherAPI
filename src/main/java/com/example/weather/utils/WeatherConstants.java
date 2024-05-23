@@ -32,7 +32,7 @@ public final class WeatherConstants {
            "timestamp": 1716394388.875877000
       }""";
 
-  public static final String GET_500_EXAMPLE_JSON = """
+  public static final String ERROR_500_EXAMPLE_JSON = """
       {
           "timestamp":1716393172755,
           "status":500,

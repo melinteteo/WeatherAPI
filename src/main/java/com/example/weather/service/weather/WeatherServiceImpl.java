@@ -34,6 +34,9 @@ public class WeatherServiceImpl implements WeatherService {
   private final ObjectMapper objectMapper;
   private final WeatherMapper weatherMapper;
 
+  private static final Set<String> criteriaToSortBy = Set.of("cityName", "temperature", "humidity", "maxTemperature",
+      "minTemperature",
+      "id");
 
   @Override
   public void initWeather() throws IOException {
@@ -42,24 +45,21 @@ public class WeatherServiceImpl implements WeatherService {
         new TypeReference<>() {
         });
 
-    List<CityDto> first100GCitiesList = citiesList.subList(0, 100);
-
-    List<WeatherEntity> listOfFirst100WeatherByCityEntity = first100GCitiesList.stream()
+    var firstHundredWeatherEntityList = citiesList.subList(0, 100).stream()
         .map(cityDto -> WeatherEntity.builder().cityId(cityDto.getId()).cityName(cityDto.getName()).build()).toList();
 
-    Iterable<WeatherEntity> openWeatherResponses = openWeatherService.getWeatherForFirst100Cities(
-        listOfFirst100WeatherByCityEntity, Optional.empty(), Optional.empty());
+    openWeatherService.updateWeatherEntityList(
+        firstHundredWeatherEntityList, Optional.empty(), Optional.empty());
 
-    weatherRepository.saveAll(openWeatherResponses);
+    weatherRepository.saveAll(firstHundredWeatherEntityList);
   }
 
   @Override
   public ResponseEntity<Page<WeatherDto>> getWeatherPageForAllCities(Optional<Integer> page, Optional<String> sortBy) {
-    Set<String> criteriaToSortBy = Set.of("cityName", "temperature", "humidity", "maxTemperature", "minTemperature",
-        "id");
+
     if (sortBy.isPresent() && !criteriaToSortBy.contains(sortBy.get())) {
-      throw new WeatherBadRequestException(
-          "sorting criteria not existing, please try one from this list: " + criteriaToSortBy);
+      throw new WeatherBadRequestException("sorting criteria not existing, please try one from this list: ".concat(
+          criteriaToSortBy.toString()));
     }
     Page<WeatherEntity> weatherEntityPage;
     Page<WeatherDto> weatherDtoPage;
@@ -76,8 +76,9 @@ public class WeatherServiceImpl implements WeatherService {
 
   @Override
   public ResponseEntity<String> refreshWeather(Optional<String> units, Optional<String> languageCode) {
-    List<WeatherEntity> weatherEntities = openWeatherService.getWeatherForFirst100Cities(
-        weatherRepository.findAll(), units, languageCode);
+    List<WeatherEntity> weatherEntities = weatherRepository.findAll();
+    openWeatherService.updateWeatherEntityList(
+        weatherEntities, units, languageCode);
 
     weatherRepository.saveAll(weatherEntities);
 

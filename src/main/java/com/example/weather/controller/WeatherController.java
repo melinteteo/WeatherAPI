@@ -36,8 +36,7 @@ public class WeatherController {
           responseCode = "200",
           content = @Content(examples = {
               @ExampleObject(name = "cityWeather", summary = "Retrieves the weather for 20 out of 100 cities.",
-                  description = "Retrieves the temperature, humidity, maximum"
-                                + " and minimum temperature for 20 out of 100 cities.",
+                  description = "Retrieves the temperature, humidity, maximum and minimum temperature",
                   value = WeatherConstants.GET_200_EXAMPLE_JSON)},
               mediaType = MediaType.APPLICATION_JSON_VALUE)),
       @ApiResponse(
@@ -52,7 +51,7 @@ public class WeatherController {
           content = @Content(examples = {
               @ExampleObject(name = "internalServiceError", summary = "Returns an internal service error message",
                   description = "Returns an internal service error message",
-                  value = WeatherConstants.GET_500_EXAMPLE_JSON)},
+                  value = WeatherConstants.ERROR_500_EXAMPLE_JSON)},
               mediaType = MediaType.APPLICATION_JSON_VALUE))
   })
   public ResponseEntity<Page<WeatherDto>> getWeatherPageForAllCities(
@@ -70,13 +69,13 @@ public class WeatherController {
               @ExampleObject(name = "deleteCitiesWeather", summary = "Deletes the weather for all cities",
                   description = "Deletes the weather for all cities",
                   value = "Success")},
-              mediaType = MediaType.APPLICATION_JSON_VALUE)),
+              mediaType = MediaType.TEXT_PLAIN_VALUE)),
       @ApiResponse(
           responseCode = "500",
           content = @Content(examples = {
               @ExampleObject(name = "internalServiceError", summary = "Returns an internal service error message",
                   description = "Returns an internal service error message",
-                  value = WeatherConstants.GET_500_EXAMPLE_JSON)},
+                  value = WeatherConstants.ERROR_500_EXAMPLE_JSON)},
               mediaType = MediaType.APPLICATION_JSON_VALUE))
   })
   public ResponseEntity<String> deleteAllCities() {
@@ -91,21 +90,14 @@ public class WeatherController {
           content = @Content(examples = {
               @ExampleObject(name = "refreshCitiesWeather", summary = "Refreshes the weather for all cities.",
                   description = "Refreshes the weather for all cities.",
-                  value = WeatherConstants.GET_200_EXAMPLE_JSON)},
-              mediaType = MediaType.APPLICATION_JSON_VALUE)),
-      @ApiResponse(
-          responseCode = "400",
-          content = @Content(examples = {
-              @ExampleObject(name = "badRequest", summary = "Returns a bad request message",
-                  description = "Returns a bad request message",
-                  value = WeatherConstants.GET_400_EXAMPLE_JSON)},
-              mediaType = MediaType.APPLICATION_JSON_VALUE)),
+                  value = "Success")},
+              mediaType = MediaType.TEXT_PLAIN_VALUE)),
       @ApiResponse(
           responseCode = "500",
           content = @Content(examples = {
               @ExampleObject(name = "internalServiceError", summary = "Returns an internal service error message",
                   description = "Returns an internal service error message",
-                  value = WeatherConstants.GET_500_EXAMPLE_JSON)},
+                  value = WeatherConstants.ERROR_500_EXAMPLE_JSON)},
               mediaType = MediaType.APPLICATION_JSON_VALUE))
   })
   public ResponseEntity<String> refreshWeatherAllCities(
